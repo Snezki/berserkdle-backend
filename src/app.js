@@ -4,7 +4,7 @@ const morgan = require('morgan')
 require('dotenv').config()
 
 const sequelize = require('./config/db');
-const Character = require('./models/Character')
+const { Character } = require('./models');
 
 const app = express()
 
@@ -22,7 +22,7 @@ sequelize.sync()
 
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Berserkdle API' })
-});
+})
 
 app.get('/api/characters', async (req, res) => {
     try {
@@ -32,6 +32,6 @@ app.get('/api/characters', async (req, res) => {
         console.error(err)
         res.status(500).json({ error: 'Error fetching characters' })
     }
-});
+})
 
-module.exports = app;
+module.exports = app

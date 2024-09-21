@@ -9,10 +9,10 @@ const sequelize = new Sequelize('berserkdle', process.env.DB_USER, process.env.D
 // Test the connection
 sequelize.authenticate()
     .then(() => {
-        console.log('Connection has been established successfully.');
+        console.log('Connection has been established successfully.')
     })
     .catch(err => {
-        console.error('Unable to connect to the database:', err);
-    });
+        console.error('Unable to connect to the database:', err)
+    })
 
 module.exports = sequelize;
