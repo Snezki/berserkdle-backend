@@ -19,10 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
     },
-    clue: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
     typeQuestion: {
       type: DataTypes.TEXT,
       allowNull: false,
