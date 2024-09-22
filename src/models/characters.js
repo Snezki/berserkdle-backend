@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = (sequelize, DataTypes) => {
   const Character = sequelize.define('Character', {
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'characters',
     timestamps: true,
-  });
+  })
 
   Character.associate = function(models) {
     Character.belongsToMany(models.Question, {
@@ -50,8 +50,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'characterId',
       otherKey: 'questionId',
       as: 'questions'
-    });
-  };
+    })
+  }
 
   return Character
-};
+}

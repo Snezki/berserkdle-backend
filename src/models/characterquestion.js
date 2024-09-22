@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = (sequelize, DataTypes) => {
   const CharacterQuestion = sequelize.define('CharacterQuestion', {
@@ -37,11 +37,18 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'character_questions', 
     timestamps: true,
-  });
+  })
 
-  CharacterQuestion.associate = function(models) {
-    // Define associations if needed
-  };
+  CharacterQuestion.associate = (models) => {
+    CharacterQuestion.belongsTo(models.Question, {
+        foreignKey: 'questionId',
+        as: 'Question',
+    })
+    CharacterQuestion.belongsTo(models.Character, {
+        foreignKey: 'characterId',
+        as: 'Character',
+    })
+  }
 
-  return CharacterQuestion;
-};
+  return CharacterQuestion
+}

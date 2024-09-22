@@ -1,5 +1,4 @@
-
-'use strict';
+'use strict'
 
 module.exports = (sequelize, DataTypes) => {
   const Question = sequelize.define('Question', {
@@ -9,15 +8,9 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
-    characterId: {
-      type: DataTypes.INTEGER,
+    question: {
+      type: DataTypes.TEXT,
       allowNull: false,
-      references: {
-        model: 'characters',
-        key: 'id',
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
     },
     typeQuestion: {
       type: DataTypes.TEXT,
@@ -36,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'questions',
     timestamps: true,
-  });
+  })
 
   Question.associate = function(models) {
     Question.belongsToMany(models.Character, {
@@ -44,8 +37,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'questionId',
       otherKey: 'characterId',
       as: 'characters'
-    });
-  };
+    })
+  }
 
   return Question
 }
