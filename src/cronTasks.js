@@ -5,6 +5,24 @@ const createDailyEntries = async () => {
     try {
         const questions = await Question.findAll()
 
+        const today = new Date()
+        const startOfDay = new Date(today.setHours(0, 0, 0, 0))
+        const endOfDay = new Date(today.setHours(23, 59, 59, 999))
+
+        const existingEntries = await CharacterQuestion.findAll({
+            where: {
+                createdAt: {
+                    [Op.gte]: startOfDay,
+                    [Op.lte]: endOfDay,
+                },
+            },
+        })
+
+        if (existingEntries.length > 0) {
+            console.log('Entries for today already exist.');
+            return;
+        }
+
         for (const question of questions) {
             const randomCharacter = await getRandomCharacter()
             await CharacterQuestion.create({
