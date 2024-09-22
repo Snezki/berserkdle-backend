@@ -26,10 +26,6 @@ module.exports = {
         onDelete: 'CASCADE',
         primaryKey: true, 
       },
-      clue: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -44,6 +40,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('CharacterQuestions');
+    await queryInterface.dropTable('character_questions');
   }
 }

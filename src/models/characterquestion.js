@@ -24,10 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       primaryKey: true,
     },
-    clue: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
