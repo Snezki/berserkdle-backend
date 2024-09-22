@@ -1,4 +1,3 @@
-// src/models/character.js
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
@@ -44,6 +43,15 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'characters',
     timestamps: true,
   });
+
+  Character.associate = function(models) {
+    Character.belongsToMany(models.Question, {
+      through: models.CharacterQuestion,
+      foreignKey: 'characterId',
+      otherKey: 'questionId',
+      as: 'questions'
+    });
+  };
 
   return Character
 };

@@ -4,7 +4,7 @@ const morgan = require('morgan')
 require('dotenv').config()
 
 const sequelize = require('./config/db');
-const { Character } = require('./models');
+const { Character, Sequelize } = require('./models');
 
 const app = express()
 
@@ -31,6 +31,23 @@ app.get('/api/characters', async (req, res) => {
     } catch (err) {
         console.error(err)
         res.status(500).json({ error: 'Error fetching characters' })
+    }
+})
+
+app.get('/api/get-random-character', async (req, res) => {
+    try {
+        const randomCharacter = await Character.findOne({
+            order: Sequelize.literal('RANDOM()')
+        })
+
+        if (randomCharacter) {
+            res.json(randomCharacter)
+        } else {
+            res.status(400).send('No characters found')
+        }
+    } catch (err) {
+        console.error(err)
+        res.status(500).json({ error: 'Error fetching randoom character'})
     }
 })
 
