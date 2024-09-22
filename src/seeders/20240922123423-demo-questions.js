@@ -1,4 +1,8 @@
-'use strict';
+'use strict'
+
+const questions = [
+  
+]
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

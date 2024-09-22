@@ -12,6 +12,9 @@ module.exports = {
       question: {
         type: Sequelize.TEXT
       },
+      typeQuestion: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
