@@ -26,6 +26,9 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Berserkdle API' })
 })
 
+/**
+ * 
+ */
 app.get('/api/questions-characters', async (req, res) => {
     try {
         const results = await CharacterQuestion.findAll({
@@ -58,6 +61,9 @@ app.get('/api/questions-characters', async (req, res) => {
     }
 })
 
+/**
+ * Get all characters
+ */
 app.get('/api/characters', async (req, res) => {
     try {
         const characters = await Character.findAll()
@@ -68,6 +74,9 @@ app.get('/api/characters', async (req, res) => {
     }
 })
 
+/**
+ * Get one random character
+ */
 app.get('/api/get-random-character', async (req, res) => {
     try {
         const randomCharacter = await Character.findOne({
@@ -85,14 +94,15 @@ app.get('/api/get-random-character', async (req, res) => {
     }
 })
 
+/**
+ * Get question / character for today
+ */
 app.get('/api/quote', async (req, res) => {
+    const typeQuestion = "quote"
+    console.log(typeQuestion)
     try {
-        const question = await Question.findOne({
-            where: {
-                typeQuestion: 'quote'
-            },
-        })
-
+        const question = await getTodayQuestionByType(typeQuestion)
+        console.log(question.id)
         const todayQuestion = await getTodayQuestionCharacter(question.id)
         const todayQuote = todayQuestion.Character.quotes
 
@@ -127,29 +137,46 @@ app.post('/guesses', async (req, res) => {
     
 })
 
-const getTodayQuestionCharacter = async (questionId) => {
-    const result = await CharacterQuestion.findOne({
-        where: {
-            createdAt: {
-                [Op.between]: [getStartOfDay(), getEndOfDay()],
+const getTodayQuestionByType = async (typeQuestion) => {
+    try {
+        return await Question.findOne({
+            where: {
+                typeQuestion
             },
-            questionId
-        },
-        include: [
-            {
-                model: Question,
-                as: 'Question',
-                attributes: ['question'],
-            }, 
-            {
-                model: Character,
-                as: 'Character',
-                attributes: ['name', 'quotes'],     
-            }
-        ]
-    })
+        })
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching question'})
+    }
+}
 
-    return result
+const getTodayQuestionCharacter = async (questionId) => {
+    try {
+        const result = await CharacterQuestion.findOne({
+            where: {
+                createdAt: {
+                    [Op.between]: [getStartOfDay(), getEndOfDay()],
+                },
+                questionId
+            },
+            include: [
+                {
+                    model: Question,
+                    as: 'Question',
+                    attributes: ['question'],
+                }, 
+                {
+                    model: Character,
+                    as: 'Character',
+                    attributes: ['name', 'quotes'],     
+                }
+            ]
+        })
+        return result
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching question character    '})
+    }
+
+    
 }
 
 const getCharacterByName = async (name) => {
