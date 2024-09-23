@@ -1,12 +1,11 @@
 const { Sequelize } = require('sequelize');
 
-// Create a new Sequelize instance
 const sequelize = new Sequelize('berserkdle', process.env.DB_USER, process.env.DB_PASSWORD, {
     host: 'localhost',
     dialect: 'postgres',
-});
+})
 
-// Test the connection
+
 sequelize.authenticate()
     .then(() => {
         console.log('Connection has been established successfully.')
@@ -15,4 +14,4 @@ sequelize.authenticate()
         console.error('Unable to connect to the database:', err)
     })
 
-module.exports = sequelize;
+module.exports = sequelize

@@ -1,5 +1,6 @@
 const { CharacterQuestion, Question, Character } = require('./models')
 const Sequelize = require('sequelize')
+const { Op } = require('sequelize')
 
 const createDailyEntries = async () => {
     try {
