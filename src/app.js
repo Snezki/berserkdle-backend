@@ -110,14 +110,12 @@ app.get('/api/get-random-character', async (req, res) => {
 })
 
 /**
- * Get question / character for today
+ * Get question quote / character for today
  */
 app.get('/api/quote', async (req, res) => {
-    const typeQuestion = "quote"
-    console.log(typeQuestion)
+    const typeQuestion = 'quote'
     try {
         const question = await getTodayQuestionByType(typeQuestion)
-        console.log(question.id)
         const todayQuestion = await getTodayQuestionCharacter(question.id)
         const todayQuote = todayQuestion.Character.quotes
 
@@ -182,16 +180,20 @@ const getTodayQuestionCharacter = async (questionId) => {
                 {
                     model: Character,
                     as: 'Character',
-                    attributes: ['name', 'quotes'],     
+                    attributes: ['name', 'quotes'],
                 }
             ]
-        })
-        return result
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching question character    '})
-    }
+        });
 
-    
+        if (!result) {
+            console.log('No question-character pair found for the given date.');
+        }
+
+        return result;
+    } catch (error) {
+        console.error('Error fetching question character:', error);
+        throw error;
+    }
 }
 
 const getCharacterByName = async (name) => {
