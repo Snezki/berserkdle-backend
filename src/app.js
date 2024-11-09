@@ -10,7 +10,22 @@ const app = express()
 const { Character, CharacterQuestion, Question, Sequelize } = require('./models')
 const { getStartOfDay, getEndOfDay } = require('./utils/dateUtils')
 
-app.use(cors())
+const allowedOrigins = ['http://localhost:8080']
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false,
+};
+
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(morgan('dev'))
 
