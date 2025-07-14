@@ -81,8 +81,8 @@ app.get('/api/questions-characters', async (req, res) => {
  */
 app.get('/api/characters', async (req, res) => {
     try {
-        const characters = await Character.findAll()
-        res.json(characters)
+        const characters = await Character.findAll({ attributes: ['name'] })
+        res.json(characters.map(c => c.name))
     } catch (err) {
         console.error(err)
         res.status(500).json({ error: 'Error fetching characters' })
