@@ -3,7 +3,6 @@ const cors = require('cors')
 const morgan = require('morgan')
 require('dotenv').config()
 const sequelize = require('./config/db')
-const { createDailyEntries } = require('./cronTasks')
 const { Op } = require('sequelize')
 const app = express()
 
@@ -23,7 +22,7 @@ const corsOptions = {
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false,
-};
+}
 
 app.use(cors(corsOptions))
 app.use(express.json())
@@ -69,7 +68,7 @@ app.get('/api/questions-characters', async (req, res) => {
         res.json(results.map(entry => ({
             question: entry.Question.question,
             character: entry.Character.name
-        })));
+        })))
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: 'Error fetching questions with characters' })
@@ -127,7 +126,38 @@ app.get('/api/quote', async (req, res) => {
 
 app.get('/api/create-questions', async (req, res) => {
     try {
-        await createDailyEntries()
+        try {
+            const questions = await Question.findAll()
+    
+            const today = new Date()
+            const startOfDay = new Date(today.setHours(0, 0, 0, 0))
+            const endOfDay = new Date(today.setHours(23, 59, 59, 999))
+    
+            const existingEntries = await CharacterQuestion.findAll({
+                where: {
+                    createdAt: {
+                        [Op.gte]: startOfDay,
+                        [Op.lte]: endOfDay,
+                    },
+                },
+            })
+    
+            if (existingEntries.length > 0) {
+                console.log('Entries for today already exist.')
+                return
+            }
+    
+            for (const question of questions) {
+                const randomCharacter = await getRandomCharacter()
+                await CharacterQuestion.create({
+                    characterId: randomCharacter.id,
+                    questionId: question.id,
+                })
+            }
+            console.log('Daily entries created successfully.')
+        } catch (err) {
+            console.error('Error creating daily entries', err)
+        }
         res.json('Question created')
     } catch (error) {
         res.status(500).json({error})
@@ -192,16 +222,16 @@ const getTodayQuestionCharacter = async (questionId) => {
                     attributes: ['name', 'quotes'],
                 }
             ]
-        });
+        })
 
         if (!result) {
-            console.log('No question-character pair found for the given date.');
+            console.log('No question-character pair found for the given date.')
         }
 
-        return result;
+        return result
     } catch (error) {
-        console.error('Error fetching question character:', error);
-        throw error;
+        console.error('Error fetching question character:', error)
+        throw error
     }
 }
 
