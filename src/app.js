@@ -118,8 +118,7 @@ app.get('/api/quote', async (req, res) => {
         const question = await getTodayQuestionByType(typeQuestion)
         const todayQuestion = await getTodayQuestionCharacter(question.id)
         const todayQuote = todayQuestion.Character.quotes
-
-        res.json({question: question.question, quotes: todayQuote})
+        res.json({question: question.question, quotes: todayQuote, character: todayQuestion.Character.name})
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: 'Error fetching quote question'})
