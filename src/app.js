@@ -149,6 +149,16 @@ app.post('/guesses', async (req, res) => {
     
 })
 
+app.get('/api/characters/:name', async (req, res) => {
+    try {
+        const { name } = req.params
+        const character = await getCharacterByName(name)
+        res.json(character)
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching character by name'})
+    }
+})
+
 const getTodayQuestionByType = async (typeQuestion) => {
     try {
         return await Question.findOne({
